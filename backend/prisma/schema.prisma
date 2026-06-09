@@ -1,0 +1,221 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+  ANALYST
+  AUDITOR
+}
+
+model User {
+  id             String         @id @default(uuid())
+  name           String
+  email          String         @unique
+  password_hash  String
+  role           Role           @default(USER)
+  refresh_token  String?        
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+
+  wallet         Wallet?
+  login_history  LoginHistory[]
+  
+  owned_beneficiaries  Beneficiary[] @relation("OwnerBeneficiaries")
+  target_beneficiaries Beneficiary[] @relation("TargetBeneficiaries")
+
+  @@map("users")
+}
+
+model Wallet {
+  id            String   @id @default(uuid())
+  user_id       String   @unique
+  wallet_number String   @unique 
+  balance       Decimal  @default(0.00) @db.Decimal(12, 2)
+  status        String   @default("ACTIVE") 
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  sent_transactions     Transaction[] @relation("SentTransactions")
+  received_transactions Transaction[] @relation("ReceivedTransactions")
+
+  ledger_account LedgerAccount?
+  deposit_intents DepositIntent[]
+
+  @@map("wallets")
+}
+
+model LoginHistory {
+  id         String   @id @default(uuid())
+  user_id    String
+  ip_address String?
+  device     String?
+  timestamp  DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("login_history")
+}
+
+model Beneficiary {
+  id                  String   @id @default(uuid())
+  owner_user_id       String
+  beneficiary_user_id String
+  nickname            String?
+  is_favorite         Boolean  @default(false)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  owner       User @relation("OwnerBeneficiaries", fields: [owner_user_id], references: [id], onDelete: Cascade)
+  beneficiary User @relation("TargetBeneficiaries", fields: [beneficiary_user_id], references: [id], onDelete: Cascade)
+
+  @@unique([owner_user_id, beneficiary_user_id])
+  @@map("beneficiaries")
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  BLOCKED
+}
+
+model Transaction {
+  id                    String            @id @default(uuid())
+  transaction_reference String            @unique 
+  sender_wallet_id      String?
+  receiver_wallet_id    String
+  amount                Decimal           @db.Decimal(12, 2)
+  status                TransactionStatus @default(PENDING)
+  description           String?
+  created_at            DateTime          @default(now())
+  updated_at            DateTime          @updatedAt
+
+  sender   Wallet? @relation("SentTransactions", fields: [sender_wallet_id], references: [id])
+  receiver Wallet  @relation("ReceivedTransactions", fields: [receiver_wallet_id], references: [id])
+  
+  ledger_entries LedgerEntry[]
+  risk_assessment RiskAssessment?
+
+  @@index([sender_wallet_id])
+  @@index([created_at])
+  @@map("transactions")
+}
+
+// ----------------------------------------------------
+// PHASE 4: FRAUD DETECTION & RISK
+// ----------------------------------------------------
+
+model RiskAssessment {
+  id              String      @id @default(uuid())
+  transaction_id  String      @unique
+  risk_score      Int         @default(0)
+  flagged_rules   String[]
+  evaluated_at    DateTime    @default(now())
+
+  transaction     Transaction @relation(fields: [transaction_id], references: [id])
+  
+  @@map("risk_assessments")
+}
+
+// ----------------------------------------------------
+// PHASE 3: LEDGER ARCHITECTURE
+// ----------------------------------------------------
+
+model LedgerAccount {
+  id           String   @id @default(uuid())
+  wallet_id    String?  @unique
+  account_code String   @unique // USR-WALLET-XXXXXXXX or SYS-RESERVE
+  account_name String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  wallet         Wallet?       @relation(fields: [wallet_id], references: [id])
+  ledger_entries LedgerEntry[]
+
+  @@map("ledger_accounts")
+}
+
+enum LedgerBatchStatus {
+  PENDING
+  POSTED
+  REVERSED
+}
+
+model LedgerBatch {
+  id              String            @id @default(uuid())
+  batch_reference String            @unique // LGR-XXXXXXXX
+  status          LedgerBatchStatus @default(PENDING)
+  posted_at       DateTime?
+  reversed_at     DateTime?
+  created_at      DateTime          @default(now())
+
+  entries LedgerEntry[]
+
+  @@map("ledger_batches")
+}
+
+enum LedgerEntryType {
+  DEBIT
+  CREDIT
+}
+
+model LedgerEntry {
+  id                String          @id @default(uuid())
+  transaction_id    String
+  ledger_batch_id   String
+  ledger_account_id String
+  entry_type        LedgerEntryType
+  amount            Decimal         @db.Decimal(12, 2)
+  description       String?
+  created_at        DateTime        @default(now())
+
+  transaction    Transaction   @relation(fields: [transaction_id], references: [id])
+  batch          LedgerBatch   @relation(fields: [ledger_batch_id], references: [id])
+  ledger_account LedgerAccount @relation(fields: [ledger_account_id], references: [id])
+
+  @@index([transaction_id])
+  @@index([ledger_batch_id])
+  @@index([ledger_account_id])
+  @@index([created_at])
+  @@map("ledger_entries")
+}
+
+// ----------------------------------------------------
+// PHASE 5: WALLET FUNDING & DEPOSIT ENGINE
+// ----------------------------------------------------
+
+enum DepositStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model DepositIntent {
+  id                 String        @id @default(uuid())
+  reference          String        @unique // Secure internal tracking ID
+  wallet_id          String
+  amount             Decimal       @db.Decimal(15, 2)
+  currency           String        @default("INR")
+  status             DepositStatus @default(PENDING)
+  provider_reference String?       @unique // External ID supplied by mock gateway
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+  settled_at         DateTime?
+  
+  wallet             Wallet        @relation(fields: [wallet_id], references: [id])
+
+  @@index([wallet_id])
+  @@index([status])
+  @@index([wallet_id, status])
+  @@map("deposit_intents")
+}
