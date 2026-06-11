@@ -23,11 +23,6 @@ export default function LandingPage() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           className="flex-1 space-y-6 md:space-y-10 text-center lg:text-left mt-8 lg:mt-0 w-full"
         >
-          <div className="inline-flex items-center gap-3 bg-[#1c2333]/80 border border-primary/30 text-primary px-4 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold backdrop-blur-md shadow-[0_0_30px_rgba(124,77,255,0.15)] mx-auto lg:mx-0">
-            <span className="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_#7C4DFF]"></span>
-            AI-Powered Payment Security
-          </div>
-          
           <h1 className="text-5xl md:text-7xl lg:text-[96px] font-black tracking-tighter leading-[1.1] md:leading-[1.05] text-white break-words">
             Smarter Payments,<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
