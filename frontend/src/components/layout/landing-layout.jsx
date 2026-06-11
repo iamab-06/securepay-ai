@@ -1,10 +1,12 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
 
 export function LandingLayout() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-[#0B1020] text-white selection:bg-primary/30 font-sans overflow-hidden relative">
       {/* Background ambient light */}
@@ -32,7 +34,10 @@ export function LandingLayout() {
         
         <div className="flex items-center gap-3 md:gap-6 shrink-0">
           <Link to="/login" className="text-xs md:text-sm font-semibold text-gray-300 hover:text-white transition-colors">Sign In</Link>
-          <Button className="bg-primary hover:bg-primary/90 text-white rounded-lg md:rounded-xl px-4 md:px-8 h-9 md:h-12 shadow-premium text-xs md:text-sm font-bold">
+          <Button 
+            onClick={() => navigate('/register')}
+            className="bg-primary hover:bg-primary/90 text-white rounded-lg md:rounded-xl px-4 md:px-8 h-9 md:h-12 shadow-premium text-xs md:text-sm font-bold cursor-pointer transition-transform hover:scale-105 active:scale-95"
+          >
             Get Started
           </Button>
         </div>

@@ -2,8 +2,15 @@ import React from 'react';
 import { Shield, Lock, Users, Building, CheckCircle2, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+
+  const scrollToHowItWorks = () => {
+    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 pb-20 md:pb-32 overflow-hidden">
       {/* Hero Section */}
@@ -33,10 +40,19 @@ export default function LandingPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-4 pt-4 md:pt-6 w-full max-w-sm mx-auto lg:mx-0">
-            <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white rounded-2xl px-8 md:px-10 h-14 md:h-16 text-base md:text-lg shadow-[0_10px_40px_rgba(124,77,255,0.3)] font-bold">
+            <Button 
+              size="lg" 
+              onClick={() => navigate('/register')}
+              className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white rounded-2xl px-8 md:px-10 h-14 md:h-16 text-base md:text-lg shadow-[0_10px_40px_rgba(124,77,255,0.3)] font-bold cursor-pointer transition-transform hover:scale-105 active:scale-95"
+            >
               Create Account
             </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto border-gray-700 bg-[#1c2333]/50 text-white hover:bg-white/10 rounded-2xl px-8 md:px-10 h-14 md:h-16 text-base md:text-lg font-bold backdrop-blur-md">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={scrollToHowItWorks}
+              className="w-full sm:w-auto border-gray-700 bg-[#1c2333]/50 text-white hover:bg-white/10 rounded-2xl px-8 md:px-10 h-14 md:h-16 text-base md:text-lg font-bold backdrop-blur-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
+            >
               <Play size={20} className="mr-2 shrink-0" />
               Watch Demo
             </Button>
@@ -103,10 +119,11 @@ export default function LandingPage() {
       
       {/* Feature Cards Grid */}
       <motion.div 
+        id="how-it-works"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-40 mt-12"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-40 mt-12 scroll-mt-24"
       >
         {[
           { icon: Lock, title: "Bank-Level Security", subtitle: "256-bit Encryption" },
