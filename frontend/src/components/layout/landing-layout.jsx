@@ -14,13 +14,13 @@ export function LandingLayout() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="flex items-center justify-between px-8 md:px-12 py-8 max-w-[1440px] mx-auto relative z-50"
+        className="flex items-center justify-between px-4 sm:px-8 md:px-12 py-4 md:py-8 max-w-[1440px] mx-auto relative z-50 gap-2"
       >
-        <div className="flex items-center gap-3">
-          <div className="bg-primary/20 text-primary p-2.5 rounded-xl border border-primary/20 shadow-[0_0_20px_rgba(124,77,255,0.2)]">
-            <ShieldCheck size={32} />
+        <div className="flex items-center gap-2 md:gap-3 shrink-0">
+          <div className="bg-primary/20 text-primary p-2 md:p-2.5 rounded-lg md:rounded-xl border border-primary/20 shadow-[0_0_20px_rgba(124,77,255,0.2)]">
+            <ShieldCheck className="w-6 h-6 md:w-8 md:h-8" />
           </div>
-          <span className="text-3xl font-extrabold tracking-tight">SecurePay <span className="text-primary">AI</span></span>
+          <span className="text-xl md:text-3xl font-extrabold tracking-tight">SecurePay <span className="text-primary hidden sm:inline">AI</span></span>
         </div>
         
         <div className="hidden lg:flex items-center gap-12 text-sm font-semibold text-gray-300">
@@ -30,9 +30,9 @@ export function LandingLayout() {
           <Link to="#" className="hover:text-white transition-colors">About us</Link>
         </div>
         
-        <div className="flex items-center gap-6">
-          <Link to="/dashboard" className="text-sm font-semibold text-gray-300 hover:text-white transition-colors">Sign In</Link>
-          <Button className="bg-primary hover:bg-primary/90 text-white rounded-xl px-8 h-12 shadow-premium text-sm font-bold">
+        <div className="flex items-center gap-3 md:gap-6 shrink-0">
+          <Link to="/login" className="text-xs md:text-sm font-semibold text-gray-300 hover:text-white transition-colors">Sign In</Link>
+          <Button className="bg-primary hover:bg-primary/90 text-white rounded-lg md:rounded-xl px-4 md:px-8 h-9 md:h-12 shadow-premium text-xs md:text-sm font-bold">
             Get Started
           </Button>
         </div>
