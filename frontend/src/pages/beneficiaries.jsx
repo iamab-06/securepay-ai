@@ -58,11 +58,11 @@ export default function BeneficiariesPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 pb-12">
-      <div className="flex items-center justify-between">
+    <div className="max-w-5xl mx-auto space-y-6 md:space-y-8 pb-12 px-2 md:px-0">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-black text-foreground tracking-tight">Beneficiaries</h2>
-          <p className="text-muted-foreground mt-1 font-medium">Manage your trusted contacts for quick transfers.</p>
+          <h2 className="text-2xl md:text-3xl font-black text-foreground tracking-tight">Beneficiaries</h2>
+          <p className="text-sm md:text-base text-muted-foreground mt-1 font-medium">Manage your trusted contacts for quick transfers.</p>
         </div>
       </div>
 
@@ -136,13 +136,13 @@ export default function BeneficiariesPage() {
                     key={b?.id || i} 
                     className="flex items-center justify-between p-4 border border-border bg-background rounded-2xl hover:border-primary/30 transition-all hover:shadow-sm"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold text-lg">
+                    <div className="flex items-center gap-3 md:gap-4 max-w-[80%]">
+                      <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold text-lg shrink-0">
                         {(b?.nickname || b?.beneficiary?.name || '?').charAt(0).toUpperCase()}
                       </div>
-                      <div>
-                        <p className="font-bold text-foreground text-base">{b?.nickname || b?.beneficiary?.name || 'Unknown User'}</p>
-                        <p className="text-xs text-muted-foreground font-medium">{b?.beneficiary?.email || 'No email'}</p>
+                      <div className="min-w-0">
+                        <p className="font-bold text-foreground text-sm md:text-base truncate">{b?.nickname || b?.beneficiary?.name || 'Unknown User'}</p>
+                        <p className="text-xs text-muted-foreground font-medium break-all">{b?.beneficiary?.email || 'No email'}</p>
                       </div>
                     </div>
                     <button 

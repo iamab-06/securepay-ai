@@ -21,10 +21,10 @@ export default function TransactionsPage() {
 
   return (
     <div className="max-w-[1200px] mx-auto space-y-8 pb-12">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-black text-foreground tracking-tight">Transaction History</h2>
-          <p className="text-muted-foreground mt-1 font-medium">Track all your incoming and outgoing transfers.</p>
+          <h2 className="text-2xl md:text-3xl font-black text-foreground tracking-tight">Transaction History</h2>
+          <p className="text-sm md:text-base text-muted-foreground mt-1 font-medium">Track all your incoming and outgoing transfers.</p>
         </div>
         <div className="relative hidden md:block">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />

@@ -25,7 +25,7 @@ const navigation = [
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isMobile }) {
   const auth = useAuth();
 
   const user = auth?.user ?? null;
@@ -33,16 +33,19 @@ export function Sidebar() {
 
   return (
     <motion.div
-      initial={{ x: -20, opacity: 0 }}
+      initial={{ x: isMobile ? 0 : -20, opacity: isMobile ? 1 : 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{
         duration: 0.6,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="flex flex-col w-[260px] bg-card border-r border-border h-screen sticky top-0"
+      className={cn(
+        "flex flex-col bg-card border-border",
+        isMobile ? "w-full h-full" : "w-[260px] border-r h-screen sticky top-0"
+      )}
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-8 h-[88px]">
+      <div className="flex items-center gap-3 px-6 md:px-8 h-[72px] md:h-[88px] shrink-0">
         <div className="bg-primary text-white p-2 rounded-xl shadow-[0_4px_12px_rgba(124,77,255,0.3)]">
           <ShieldCheck size={24} strokeWidth={2.5} />
         </div>
@@ -81,14 +84,14 @@ export function Sidebar() {
       </div>
 
       {/* User Section */}
-      <div className="p-4 border-t border-border mt-auto">
+      <div className="p-4 border-t border-border mt-auto pb-[env(safe-area-inset-bottom)]">
         <div className="flex items-center gap-3.5 px-4 py-3 rounded-2xl hover:bg-muted/50 transition-colors">
           <img
             src={`https://api.dicebear.com/7.x/initials/svg?seed=${
               user?.name || 'Guest'
             }`}
             alt="User Avatar"
-            className="w-11 h-11 rounded-full bg-muted border-2 border-background shadow-sm"
+            className="w-11 h-11 rounded-full bg-muted border-2 border-background shadow-sm shrink-0"
           />
 
           <div className="flex flex-col overflow-hidden">

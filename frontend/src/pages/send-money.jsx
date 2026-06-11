@@ -44,37 +44,37 @@ export default function SendMoneyPage() {
 
   if (successTxn) {
     return (
-      <div className="max-w-2xl mx-auto pt-12">
+      <div className="max-w-2xl mx-auto pt-6 md:pt-12 px-2 md:px-0">
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-card border border-border rounded-[2rem] p-10 flex flex-col items-center text-center shadow-premium relative overflow-hidden"
+          className="bg-card border border-border rounded-3xl md:rounded-[2rem] p-6 md:p-10 flex flex-col items-center text-center shadow-premium relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-2 bg-success"></div>
-          <div className="w-24 h-24 bg-success/10 text-success rounded-full flex items-center justify-center mb-6">
-            <CheckCircle2 size={48} strokeWidth={2.5} />
+          <div className="w-20 h-20 md:w-24 md:h-24 bg-success/10 text-success rounded-full flex items-center justify-center mb-6 shrink-0">
+            <CheckCircle2 size={40} strokeWidth={2.5} />
           </div>
-          <h2 className="text-4xl font-black text-foreground tracking-tight mb-2">Transfer Successful</h2>
-          <p className="text-muted-foreground font-medium mb-8">Your money is on its way instantly and securely.</p>
+          <h2 className="text-2xl md:text-4xl font-black text-foreground tracking-tight mb-2">Transfer Successful</h2>
+          <p className="text-sm md:text-base text-muted-foreground font-medium mb-8">Your money is on its way instantly and securely.</p>
           
-          <div className="w-full bg-background border border-border rounded-2xl p-6 mb-8 text-left space-y-4">
-            <div className="flex justify-between items-center border-b border-border pb-4">
+          <div className="w-full bg-background border border-border rounded-2xl p-4 md:p-6 mb-8 text-left space-y-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-border pb-4 gap-2">
               <span className="text-muted-foreground font-bold text-sm">Amount Sent</span>
-              <span className="text-2xl font-black text-foreground">₹{successTxn.amount}</span>
+              <span className="text-2xl font-black text-foreground break-all">₹{successTxn.amount}</span>
             </div>
-            <div className="flex justify-between items-center border-b border-border pb-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-border pb-4 gap-2">
               <span className="text-muted-foreground font-bold text-sm">Reference Number</span>
-              <span className="text-sm font-mono text-foreground font-semibold bg-muted px-2 py-1 rounded-md">{successTxn.transaction_reference}</span>
+              <span className="text-xs md:text-sm font-mono text-foreground font-semibold bg-muted px-2 py-1 rounded-md break-all">{successTxn.transaction_reference}</span>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
               <span className="text-muted-foreground font-bold text-sm">Status</span>
               <span className="text-sm font-bold text-success flex items-center gap-1.5"><ShieldCheck size={16} /> Verified Secure</span>
             </div>
           </div>
           
-          <div className="flex gap-4 w-full">
-            <Button onClick={() => window.location.reload()} className="flex-1 h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold">Send Another</Button>
-            <Link to="/dashboard" className="flex-1 h-12 rounded-xl border border-border flex items-center justify-center text-foreground font-bold hover:bg-muted transition-colors">Back to Dashboard</Link>
+          <div className="flex flex-col sm:flex-row gap-4 w-full">
+            <Button onClick={() => window.location.reload()} className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold">Send Another</Button>
+            <Link to="/dashboard" className="w-full h-12 rounded-xl border border-border flex items-center justify-center text-foreground font-bold hover:bg-muted transition-colors">Back to Dashboard</Link>
           </div>
         </motion.div>
       </div>
@@ -82,10 +82,10 @@ export default function SendMoneyPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto pb-12">
-      <div className="mb-8">
-        <h2 className="text-3xl font-black text-foreground tracking-tight">Send Money</h2>
-        <p className="text-muted-foreground mt-1 font-medium">Instantly transfer funds to your beneficiaries.</p>
+    <div className="max-w-2xl mx-auto pb-12 px-2 md:px-0">
+      <div className="mb-6 md:mb-8">
+        <h2 className="text-2xl md:text-3xl font-black text-foreground tracking-tight">Send Money</h2>
+        <p className="text-sm md:text-base text-muted-foreground mt-1 font-medium">Instantly transfer funds to your beneficiaries.</p>
       </div>
 
       <Card className="shadow-premium overflow-hidden border-border/50">

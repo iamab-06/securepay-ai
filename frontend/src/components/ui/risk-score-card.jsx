@@ -4,10 +4,10 @@ import { ShieldAlert, ShieldCheck, Shield } from 'lucide-react';
 export default function RiskScoreCard({ score = 0, isLoading = false }) {
   if (isLoading) {
     return (
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 animate-pulse">
-        <div className="h-6 w-32 bg-gray-200 rounded mb-6"></div>
-        <div className="flex items-center justify-center">
-          <div className="h-32 w-32 bg-gray-200 rounded-full"></div>
+      <div className="bg-card rounded-xl border border-border shadow-sm p-4 md:p-6 animate-pulse h-full flex flex-col">
+        <div className="h-5 w-32 bg-muted rounded mb-6"></div>
+        <div className="flex-grow flex items-center justify-center">
+          <div className="h-28 w-28 md:h-32 md:w-32 bg-muted rounded-full"></div>
         </div>
       </div>
     );
@@ -32,13 +32,13 @@ export default function RiskScoreCard({ score = 0, isLoading = false }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col h-full">
-      <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">Current Risk Profile</h3>
+    <div className="bg-card rounded-xl border border-border shadow-sm p-4 md:p-6 flex flex-col h-full">
+      <h3 className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">Current Risk Profile</h3>
       
       <div className="flex-grow flex flex-col items-center justify-center">
         <div className="relative flex items-center justify-center">
-          <svg className="w-32 h-32 transform -rotate-90">
-            <circle cx="64" cy="64" r="56" fill="none" stroke="currentColor" strokeWidth="12" className="text-gray-100" />
+          <svg className="w-28 h-28 md:w-32 md:h-32 transform -rotate-90">
+            <circle cx="64" cy="64" r="56" fill="none" stroke="currentColor" strokeWidth="12" className="text-muted/50" />
             <circle 
               cx="64" cy="64" r="56" fill="none" stroke="currentColor" strokeWidth="12" 
               strokeDasharray="351.86" 
@@ -48,14 +48,14 @@ export default function RiskScoreCard({ score = 0, isLoading = false }) {
             />
           </svg>
           <div className="absolute flex flex-col items-center justify-center">
-            <span className="text-3xl font-bold text-gray-900">{score}</span>
-            <span className="text-xs text-gray-500">/ 100</span>
+            <span className="text-2xl md:text-3xl font-bold text-foreground">{score}</span>
+            <span className="text-[10px] md:text-xs text-muted-foreground">/ 100</span>
           </div>
         </div>
         
-        <div className={`mt-6 inline-flex items-center space-x-2 px-4 py-1.5 rounded-full ${bgColor} ${color}`}>
+        <div className={`mt-4 inline-flex items-center space-x-2 px-4 py-1.5 rounded-full ${bgColor} ${color}`}>
           <Icon size={16} />
-          <span className="text-sm font-bold tracking-wide">{level} RISK</span>
+          <span className="text-xs md:text-sm font-bold tracking-wide">{level} RISK</span>
         </div>
       </div>
     </div>

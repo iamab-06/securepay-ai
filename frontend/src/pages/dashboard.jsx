@@ -203,24 +203,24 @@ export default function DashboardPage() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-3">
-                <button className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-muted transition-colors border border-transparent hover:border-border">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                    <ArrowRightLeft size={18} className="-rotate-45" />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <button className="flex sm:flex-col items-center sm:justify-center justify-start gap-4 sm:gap-2 p-4 sm:p-3 rounded-2xl hover:bg-muted transition-colors border border-transparent hover:border-border w-full">
+                  <div className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <ArrowRightLeft size={20} className="-rotate-45" />
                   </div>
-                  <span className="text-xs font-semibold text-foreground">Send Money</span>
+                  <span className="text-sm sm:text-xs font-semibold text-foreground">Send Money</span>
                 </button>
-                <button className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-muted transition-colors border border-transparent hover:border-border">
-                  <div className="w-10 h-10 rounded-xl bg-[#f59e0b]/10 text-[#f59e0b] flex items-center justify-center">
-                    <Plus size={18} />
+                <button className="flex sm:flex-col items-center sm:justify-center justify-start gap-4 sm:gap-2 p-4 sm:p-3 rounded-2xl hover:bg-muted transition-colors border border-transparent hover:border-border w-full">
+                  <div className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-[#f59e0b]/10 text-[#f59e0b] flex items-center justify-center shrink-0">
+                    <Plus size={20} />
                   </div>
-                  <span className="text-xs font-semibold text-foreground">Add Money</span>
+                  <span className="text-sm sm:text-xs font-semibold text-foreground">Add Money</span>
                 </button>
-                <button className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-muted transition-colors border border-transparent hover:border-border">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                    <QrCode size={18} />
+                <button className="flex sm:flex-col items-center sm:justify-center justify-start gap-4 sm:gap-2 p-4 sm:p-3 rounded-2xl hover:bg-muted transition-colors border border-transparent hover:border-border w-full">
+                  <div className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <QrCode size={20} />
                   </div>
-                  <span className="text-xs font-semibold text-foreground">Scan & Pay</span>
+                  <span className="text-sm sm:text-xs font-semibold text-foreground">Scan & Pay</span>
                 </button>
               </div>
             </CardContent>

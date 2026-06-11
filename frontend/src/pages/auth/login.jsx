@@ -28,14 +28,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B1020] text-white flex flex-col justify-center items-center relative overflow-hidden">
+    <div className="min-h-screen bg-[#0B1020] text-white flex flex-col justify-center items-center relative overflow-hidden px-4 md:px-0">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 blur-[150px] pointer-events-none rounded-full" />
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[440px] px-8 py-10 bg-[#1c2333]/80 border border-gray-700/50 backdrop-blur-xl shadow-2xl rounded-[2.5rem] relative z-10"
+        className="w-full max-w-[440px] px-6 py-8 md:px-8 md:py-10 bg-[#1c2333]/80 border border-gray-700/50 backdrop-blur-xl shadow-2xl rounded-3xl md:rounded-[2.5rem] relative z-10"
       >
         <div className="flex flex-col items-center mb-10">
           <div className="bg-primary/20 text-primary p-3 rounded-2xl border border-primary/20 shadow-[0_0_20px_rgba(124,77,255,0.2)] mb-6">

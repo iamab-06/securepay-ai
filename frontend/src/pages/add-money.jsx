@@ -140,7 +140,7 @@ const AddMoneyPage = () => {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-300">
+    <div className="w-full max-w-4xl mx-auto space-y-6 md:space-y-8 animate-in fade-in zoom-in-95 duration-300 pb-12">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Add Money</h1>
