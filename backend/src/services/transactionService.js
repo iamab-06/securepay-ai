@@ -3,6 +3,7 @@ const prisma = require('../config/db');
 const { limits } = require('../config/transfer');
 const ledgerService = require('./ledgerService');
 const fraudDetectionService = require('./fraudDetectionService');
+const fraudRuleEngine = require('./fraudRuleEngine');
 
 const generateTxnReference = () => {
   // Cryptographically unique reference preventing sequential guessing
@@ -169,6 +170,15 @@ exports.executeTransfer = async (senderUserId, receiverWalletId, amount, descrip
       if (Number(updatedSender.balance) < 0) {
         throw new Error('Insufficient funds'); // Rolling back entire batch & transaction
       }
+
+      // ---- PHASE 7: ASYNC FRAUD ALERT GENERATION ----
+      // Fire and forget. Does not block the transaction response.
+      fraudRuleEngine.evaluateTransferRules(
+        senderUserId, 
+        receiverWallet.user_id, 
+        transaction.id, 
+        transferAmount
+      ).catch(err => console.error('[FRAUD ALERT EXCEPTION]', err));
 
       return { transaction, newBalance: updatedSender.balance };
     });

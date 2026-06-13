@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { Link } from 'react-router-dom';
 import RiskScoreCard from '../components/ui/risk-score-card';
+import { StatusBadge } from '../components/ui/status-badge';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -28,16 +29,19 @@ export default function DashboardPage() {
   const { user, wallet, authState } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [riskProfile, setRiskProfile] = useState({ score: 0, insights: [] });
+  const [kycStatus, setKycStatus] = useState('LOADING');
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
     Promise.all([
       api.get('/transactions'),
-      api.get('/security/risk-profile')
+      api.get('/security/risk-profile'),
+      api.get('/kyc/status').catch(() => ({ data: { status: 'PENDING' } }))
     ])
-    .then(([txnRes, riskRes]) => {
+    .then(([txnRes, riskRes, kycRes]) => {
       setTransactions(txnRes.data?.data?.transactions || []);
       setRiskProfile(riskRes.data?.data || { score: 0, insights: [] });
+      setKycStatus(kycRes.data?.status || 'PENDING');
     })
     .catch(err => console.error('Failed to load dashboard data', err))
     .finally(() => setIsLoading(false));
@@ -82,6 +86,17 @@ export default function DashboardPage() {
       animate="show"
       className="space-y-6 max-w-[1600px] mx-auto w-full"
     >
+      {/* Welcome Header */}
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-card border border-border p-6 rounded-2xl shadow-sm mb-6">
+        <div>
+          <h1 className="text-2xl font-black tracking-tight text-foreground">Welcome back, {user?.name || 'User'}</h1>
+          <p className="text-muted-foreground mt-1">Here is what's happening with your account today.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <StatusBadge status={kycStatus} />
+        </div>
+      </motion.div>
+
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         <motion.div variants={itemVariants}><MetricCard title="Wallet Balance" value={formattedBalance} subtitle={wallet?.wallet_number || 'Loading...'} icon={Wallet} iconBgClass="bg-primary/10 text-primary" /></motion.div>

@@ -14,40 +14,132 @@ enum Role {
   AUDITOR
 }
 
-model User {
-  id             String         @id @default(uuid())
-  name           String
-  email          String         @unique
-  password_hash  String
-  role           Role           @default(USER)
-  refresh_token  String?        
-  created_at     DateTime       @default(now())
-  updated_at     DateTime       @updatedAt
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  COMPLIANCE_REVIEW
+  FROZEN
+}
 
-  wallet         Wallet?
-  login_history  LoginHistory[]
-  
+enum WalletStatus {
+  ACTIVE
+  FROZEN
+}
+
+enum KycStatus {
+  PENDING
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum RiskTier {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum NotificationType {
+  USER_REGISTERED
+  KYC_APPROVED
+  KYC_REJECTED
+  MONEY_SENT
+  MONEY_RECEIVED
+  WALLET_FROZEN
+  WALLET_UNFROZEN
+  LIMIT_WARNING
+}
+
+enum ActivityType {
+  USER_REGISTERED
+  USER_LOGGED_IN
+  BENEFICIARY_ADDED
+  TRANSFER_CREATED
+  TRANSFER_COMPLETED
+  KYC_SUBMITTED
+  KYC_APPROVED
+  KYC_REJECTED
+  WALLET_FROZEN
+  WALLET_UNFROZEN
+  ADMIN_ACTION
+}
+
+enum FraudRule {
+  RULE_001
+  RULE_002
+  RULE_003
+  RULE_004
+  RULE_005
+}
+
+enum FraudAlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum FraudAlertStatus {
+  OPEN
+  INVESTIGATING
+  DISMISSED
+  ESCALATED
+  RESOLVED
+}
+
+enum FraudCaseResolution {
+  FALSE_POSITIVE
+  ACCOUNT_FROZEN
+  WALLET_FROZEN
+  USER_WARNED
+  MONITOR_ONLY
+}
+
+model User {
+  id            String     @id @default(uuid())
+  name          String
+  email         String     @unique
+  password_hash String
+  role          Role       @default(USER)
+  status        UserStatus @default(ACTIVE)
+  risk_tier     RiskTier   @default(LOW)
+  refresh_token String?
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+
+  wallet        Wallet?
+  login_history LoginHistory[]
+
   owned_beneficiaries  Beneficiary[] @relation("OwnerBeneficiaries")
   target_beneficiaries Beneficiary[] @relation("TargetBeneficiaries")
+
+  kyc_submission   KycSubmission?
+  notifications    Notification[]
+  admin_audit_logs AdminAuditLog[]
+  user_activities  UserActivity[]
+
+  fraud_alerts     FraudAlert[]
+  assigned_cases   FraudCase[] @relation("AssignedFraudCases")
 
   @@map("users")
 }
 
 model Wallet {
-  id            String   @id @default(uuid())
-  user_id       String   @unique
-  wallet_number String   @unique 
-  balance       Decimal  @default(0.00) @db.Decimal(12, 2)
-  status        String   @default("ACTIVE") 
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  id            String       @id @default(uuid())
+  user_id       String       @unique
+  wallet_number String       @unique
+  balance       Decimal      @default(0.00) @db.Decimal(12, 2)
+  status        WalletStatus @default(ACTIVE)
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
 
-  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
   sent_transactions     Transaction[] @relation("SentTransactions")
   received_transactions Transaction[] @relation("ReceivedTransactions")
 
-  ledger_account LedgerAccount?
+  ledger_account  LedgerAccount?
   deposit_intents DepositIntent[]
 
   @@map("wallets")
@@ -60,7 +152,7 @@ model LoginHistory {
   device     String?
   timestamp  DateTime @default(now())
 
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("login_history")
 }
@@ -90,7 +182,7 @@ enum TransactionStatus {
 
 model Transaction {
   id                    String            @id @default(uuid())
-  transaction_reference String            @unique 
+  transaction_reference String            @unique
   sender_wallet_id      String?
   receiver_wallet_id    String
   amount                Decimal           @db.Decimal(12, 2)
@@ -101,9 +193,10 @@ model Transaction {
 
   sender   Wallet? @relation("SentTransactions", fields: [sender_wallet_id], references: [id])
   receiver Wallet  @relation("ReceivedTransactions", fields: [receiver_wallet_id], references: [id])
-  
-  ledger_entries LedgerEntry[]
+
+  ledger_entries  LedgerEntry[]
   risk_assessment RiskAssessment?
+  fraud_alerts    FraudAlert[]
 
   @@index([sender_wallet_id])
   @@index([created_at])
@@ -115,15 +208,53 @@ model Transaction {
 // ----------------------------------------------------
 
 model RiskAssessment {
-  id              String      @id @default(uuid())
-  transaction_id  String      @unique
-  risk_score      Int         @default(0)
-  flagged_rules   String[]
-  evaluated_at    DateTime    @default(now())
+  id             String   @id @default(uuid())
+  transaction_id String   @unique
+  risk_score     Int      @default(0)
+  flagged_rules  String[]
+  evaluated_at   DateTime @default(now())
 
-  transaction     Transaction @relation(fields: [transaction_id], references: [id])
-  
+  transaction Transaction @relation(fields: [transaction_id], references: [id])
+
   @@map("risk_assessments")
+}
+
+model FraudAlert {
+  id             String             @id @default(uuid())
+  user_id        String
+  transaction_id String?            
+  rule           FraudRule
+  title          String
+  description    String
+  severity       FraudAlertSeverity
+  status         FraudAlertStatus   @default(OPEN)
+  detected_at    DateTime           @default(now())
+  created_at     DateTime           @default(now())
+
+  user        User         @relation(fields: [user_id], references: [id])
+  transaction Transaction? @relation(fields: [transaction_id], references: [id])
+  fraud_case  FraudCase?
+
+  @@index([user_id])
+  @@index([status])
+  @@index([severity, status])
+  @@map("fraud_alerts")
+}
+
+model FraudCase {
+  id            String               @id @default(uuid())
+  alert_id      String               @unique
+  assigned_to   String?              
+  notes         String?
+  resolution    FraudCaseResolution? 
+  resolved_at   DateTime?
+  created_at    DateTime             @default(now())
+
+  alert    FraudAlert @relation(fields: [alert_id], references: [id], onDelete: Cascade)
+  assignee User?      @relation("AssignedFraudCases", fields: [assigned_to], references: [id])
+
+  @@index([assigned_to])
+  @@map("fraud_cases")
 }
 
 // ----------------------------------------------------
@@ -211,11 +342,79 @@ model DepositIntent {
   created_at         DateTime      @default(now())
   updated_at         DateTime      @updatedAt
   settled_at         DateTime?
-  
-  wallet             Wallet        @relation(fields: [wallet_id], references: [id])
+
+  wallet Wallet @relation(fields: [wallet_id], references: [id])
 
   @@index([wallet_id])
   @@index([status])
   @@index([wallet_id, status])
   @@map("deposit_intents")
+}
+
+// ----------------------------------------------------
+// PHASE 6.1: ENTERPRISE OPERATIONS & COMPLIANCE
+// ----------------------------------------------------
+
+model KycSubmission {
+  id               String    @id @default(uuid())
+  user_id          String    @unique
+  pan_number       String?
+  aadhaar_last4    String?
+  aadhaar_hash     String?
+  document_url     String?
+  status           KycStatus @default(PENDING)
+  rejection_reason String?
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("kyc_submissions")
+}
+
+model Notification {
+  id         String           @id @default(uuid())
+  user_id    String
+  type       NotificationType
+  title      String
+  message    String
+  action_url String?
+  metadata   Json?
+  is_read    Boolean          @default(false)
+  created_at DateTime         @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([created_at])
+  @@map("notifications")
+}
+
+model AdminAuditLog {
+  id         String   @id @default(uuid())
+  admin_id   String
+  action     String
+  target_id  String
+  details    Json?
+  created_at DateTime @default(now())
+
+  admin User @relation(fields: [admin_id], references: [id])
+
+  @@map("admin_audit_logs")
+}
+
+model UserActivity {
+  id         String       @id @default(uuid())
+  user_id    String
+  type       ActivityType
+  ip_address String?
+  device     String?
+  metadata   Json?
+  created_at DateTime     @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([created_at])
+  @@map("user_activities")
 }

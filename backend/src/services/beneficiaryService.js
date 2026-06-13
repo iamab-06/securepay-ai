@@ -1,4 +1,5 @@
 const prisma = require('../config/db');
+const fraudRuleEngine = require('./fraudRuleEngine');
 
 exports.addBeneficiary = async (ownerUserId, targetEmail, nickname) => {
   // 1. Validate target user exists
@@ -46,6 +47,9 @@ exports.addBeneficiary = async (ownerUserId, targetEmail, nickname) => {
       }
     }
   });
+
+  // ---- PHASE 7: ASYNC FRAUD ALERT GENERATION ----
+  fraudRuleEngine.evaluateBeneficiaryRules(ownerUserId).catch(err => console.error('[FRAUD ALERT EXCEPTION]', err));
 
   return beneficiary;
 };

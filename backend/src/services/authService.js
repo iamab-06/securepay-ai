@@ -75,6 +75,12 @@ exports.loginUser = async (email, password, ipAddress, device) => {
     throw err;
   }
 
+  if (user.status === 'FROZEN' || user.status === 'SUSPENDED') {
+    const err = new Error(`Account is ${user.status.toLowerCase()}. Please contact support.`);
+    err.statusCode = 403;
+    throw err;
+  }
+
   // Log History
   await prisma.loginHistory.create({
     data: {

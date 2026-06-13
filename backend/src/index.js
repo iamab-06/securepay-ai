@@ -13,6 +13,7 @@ const devRoutes = require('./routes/devRoutes');
 const securityRoutes = require('./routes/securityRoutes');
 const depositRoutes = require('./routes/depositRoutes');
 const webhookRoutes = require('./routes/webhookRoutes');
+const kycRoutes = require('./routes/kycRoutes');
 const systemAccountService = require('./services/systemAccountService');
 
 const app = express();
@@ -46,6 +47,14 @@ app.use('/api/dev', devRoutes);
 app.use('/api/security', securityRoutes);
 app.use('/api/deposits', depositRoutes);
 app.use('/api/webhooks', webhookRoutes);
+
+// Phase 6.1C - KYC
+app.use('/api/kyc', kycRoutes);
+app.use('/api/admin/kyc', kycRoutes);
+
+// Phase 6.1E - Notifications
+const notificationRoutes = require('./routes/notificationRoutes');
+app.use('/api/notifications', notificationRoutes);
 
 app.use(errorHandler);
 
