@@ -25,6 +25,7 @@ import SecurityPage from './pages/security';
 import SettingsPage from './pages/settings';
 import KycPage from './pages/settings/kyc';
 import PlaceholderPage from './pages/placeholder';
+import Insights from './pages/Insights';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -56,7 +57,7 @@ function App() {
                 <Route path="/add-money" element={<AddMoneyPage />} />
                 <Route path="/transactions" element={<TransactionsPage />} />
                 <Route path="/beneficiaries" element={<BeneficiariesPage />} />
-                <Route path="/insights" element={<PlaceholderPage title="AI Insights" />} />
+                <Route path="/insights" element={<Insights />} />
                 <Route path="/security" element={<SecurityPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/settings/kyc" element={<KycPage />} />
