@@ -51,13 +51,13 @@ export default function WalletManagement() {
     <div className="space-y-6">
       <div className="flex justify-between items-center flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Wallet Management</h1>
-          <p className="text-white/50 text-sm mt-1">Monitor ledger balances and lock suspected fraudulent wallets.</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Wallet Management</h1>
+          <p className="text-slate-500 text-sm mt-1">Monitor ledger balances and lock suspected fraudulent wallets.</p>
         </div>
         
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search size={16} className="text-white/40" />
+            <Search size={16} className="text-slate-400" />
           </div>
           <input
             type="text"
@@ -67,47 +67,47 @@ export default function WalletManagement() {
               setSearch(e.target.value);
               setPagination(p => ({ ...p, page: 1 }));
             }}
-            className="pl-10 pr-4 py-2 bg-[#121216] border border-white/10 rounded-xl text-sm text-white placeholder-white/30 focus:outline-none focus:border-primary transition-colors w-72"
+            className="pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-white/30 focus:outline-none focus:border-primary transition-colors w-72"
           />
         </div>
       </div>
 
-      <div className="bg-[#121216] border border-white/5 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/5 bg-white/5">
-                <th className="p-4 text-xs font-semibold text-white/50 uppercase tracking-wider">Wallet Number</th>
-                <th className="p-4 text-xs font-semibold text-white/50 uppercase tracking-wider">Owner Email</th>
-                <th className="p-4 text-xs font-semibold text-white/50 uppercase tracking-wider">Balance (INR)</th>
-                <th className="p-4 text-xs font-semibold text-white/50 uppercase tracking-wider">Status</th>
-                <th className="p-4 text-xs font-semibold text-white/50 uppercase tracking-wider text-right">Actions</th>
+              <tr className="border-b border-slate-200 bg-slate-50">
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Wallet Number</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Owner Email</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Balance (INR)</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
               {isLoading && wallets.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="p-8 text-center text-white/50">Loading wallets...</td>
+                  <td colSpan="5" className="p-8 text-center text-slate-500">Loading wallets...</td>
                 </tr>
               ) : wallets.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="p-8 text-center text-white/50">No wallets found.</td>
+                  <td colSpan="5" className="p-8 text-center text-slate-500">No wallets found.</td>
                 </tr>
               ) : (
                 wallets.map((w) => (
-                  <tr key={w.id} className="hover:bg-white/[0.02] transition-colors">
+                  <tr key={w.id} className="hover:bg-slate-50 transition-colors">
                     <td className="p-4">
-                      <div className="font-medium text-white font-mono">{w.wallet_number}</div>
-                      <div className="text-xs text-white/40 mt-1">Created: {new Date(w.created_at).toLocaleDateString()}</div>
+                      <div className="font-medium text-slate-900 font-mono">{w.wallet_number}</div>
+                      <div className="text-xs text-slate-400 mt-1">Created: {new Date(w.created_at).toLocaleDateString()}</div>
                     </td>
                     <td className="p-4">
-                      <div className="text-sm text-white">{w.user_email}</div>
+                      <div className="text-sm text-slate-900">{w.user_email}</div>
                       {w.user_status === 'FROZEN' && (
                         <span className="text-[10px] text-red-400 mt-1 block uppercase font-bold tracking-wider">Account Suspended</span>
                       )}
                     </td>
                     <td className="p-4">
-                      <div className="font-medium text-white tracking-tight">₹{Number(w.balance).toFixed(2)}</div>
+                      <div className="font-medium text-slate-900 tracking-tight">₹{Number(w.balance).toFixed(2)}</div>
                     </td>
                     <td className="p-4">
                       <StatusBadge status={w.status} />
@@ -142,22 +142,22 @@ export default function WalletManagement() {
         
         {/* Pagination Controls */}
         {pagination.pages > 1 && (
-          <div className="p-4 border-t border-white/5 flex justify-between items-center text-sm">
-            <span className="text-white/50">
+          <div className="p-4 border-t border-slate-200 flex justify-between items-center text-sm">
+            <span className="text-slate-500">
               Showing page {pagination.page} of {pagination.pages}
             </span>
             <div className="flex gap-2">
               <button
                 disabled={pagination.page <= 1}
                 onClick={() => setPagination(p => ({ ...p, page: p.page - 1 }))}
-                className="px-3 py-1 bg-white/5 hover:bg-white/10 rounded disabled:opacity-50 text-white transition-colors"
+                className="px-3 py-1 bg-slate-50 hover:bg-white/10 rounded disabled:opacity-50 text-slate-900 transition-colors"
               >
                 Previous
               </button>
               <button
                 disabled={pagination.page >= pagination.pages}
                 onClick={() => setPagination(p => ({ ...p, page: p.page + 1 }))}
-                className="px-3 py-1 bg-white/5 hover:bg-white/10 rounded disabled:opacity-50 text-white transition-colors"
+                className="px-3 py-1 bg-slate-50 hover:bg-white/10 rounded disabled:opacity-50 text-slate-900 transition-colors"
               >
                 Next
               </button>

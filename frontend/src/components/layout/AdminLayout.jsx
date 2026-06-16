@@ -14,7 +14,7 @@ export default function AdminLayout() {
   const location = useLocation();
 
   const navItems = [
-    { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
+    { name: 'Ledger and Audit', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'KYC Queue', path: '/admin/kyc', icon: ShieldCheck },
     { name: 'Fraud Monitoring', path: '/admin/fraud', icon: ShieldAlert },
     { name: 'Users', path: '/admin/users', icon: Users },
@@ -25,7 +25,7 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-slate-50 text-slate-900 font-inter selection:bg-primary/30">
       <TopNavbar />
       
-      <div className="flex pt-20">
+      <div className="flex">
         {/* Sidebar */}
         <motion.aside 
           initial={{ x: -50, opacity: 0 }}
