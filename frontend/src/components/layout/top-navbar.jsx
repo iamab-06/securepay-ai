@@ -179,7 +179,10 @@ export function TopNavbar() {
             </AnimatePresence>
           </div>
           
-          <Button className="hidden lg:flex rounded-full gap-2.5 shadow-premium px-6 h-12 text-[15px] font-bold">
+          <Button 
+            onClick={() => navigate('/send-money')}
+            className="hidden lg:flex rounded-full gap-2.5 shadow-premium px-6 h-12 text-[15px] font-bold"
+          >
             <Send size={18} strokeWidth={2.5} />
             Send
           </Button>
