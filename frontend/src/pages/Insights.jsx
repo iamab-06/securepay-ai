@@ -43,13 +43,13 @@ export default function Insights() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-6">
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             <BrainCircuit size={32} className="text-primary" />
             AI Insights
           </h1>
-          <p className="text-white/50 mt-1">Real-time intelligence and algorithmic profile evaluation.</p>
+          <p className="text-slate-500 mt-1">Real-time intelligence and algorithmic profile evaluation.</p>
         </div>
         
         <div className={`flex flex-col items-end px-6 py-3 rounded-2xl border border-white/5 bg-[#121216] shadow-lg`}>
