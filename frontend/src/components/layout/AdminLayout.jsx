@@ -5,7 +5,8 @@ import {
   Users, 
   Wallet, 
   ShieldCheck,
-  ShieldAlert
+  ShieldAlert,
+  ArrowLeft
 } from 'lucide-react';
 import { TopNavbar } from '../layout/top-navbar';
 
@@ -21,7 +22,7 @@ export default function AdminLayout() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-white font-inter selection:bg-primary/30">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-inter selection:bg-primary/30">
       <TopNavbar />
       
       <div className="flex pt-20">
@@ -29,10 +30,10 @@ export default function AdminLayout() {
         <motion.aside 
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="w-64 fixed h-[calc(100vh-5rem)] border-r border-white/10 bg-[#0f0f13]/80 backdrop-blur-xl hidden md:block"
+          className="w-64 fixed h-[calc(100vh-5rem)] border-r border-slate-200 bg-white hidden md:flex flex-col"
         >
-          <div className="p-6">
-            <div className="text-xs font-semibold text-white/50 tracking-wider mb-6 uppercase">
+          <div className="p-6 flex-1">
+            <div className="text-xs font-semibold text-slate-500 tracking-wider mb-6 uppercase">
               Admin Operations
             </div>
             <nav className="space-y-2">
@@ -46,15 +47,25 @@ export default function AdminLayout() {
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                       isActive 
                         ? 'bg-primary/10 text-primary border border-primary/20' 
-                        : 'text-white/70 hover:text-white hover:bg-white/5 border border-transparent'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
                     }`}
                   >
-                    <Icon size={20} className={isActive ? 'text-primary' : ''} />
+                    <Icon size={20} className={isActive ? 'text-primary' : 'text-slate-500'} />
                     <span className="font-medium">{item.name}</span>
                   </Link>
                 );
               })}
             </nav>
+          </div>
+          
+          <div className="p-6 border-t border-slate-200">
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-transparent"
+            >
+              <ArrowLeft size={20} className="text-slate-500" />
+              <span className="font-medium">Back to App</span>
+            </Link>
           </div>
         </motion.aside>
 

@@ -51,13 +51,13 @@ export default function AdminDashboard() {
       className="space-y-8"
     >
       <motion.div variants={itemVariants} className="mb-8">
-        <h1 className="text-3xl font-bold text-white tracking-tight">System Overview</h1>
-        <p className="text-white/50 mt-1">Real-time enterprise metrics and compliance status.</p>
+        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">System Overview</h1>
+        <p className="text-slate-500 mt-1">Real-time enterprise metrics and compliance status.</p>
       </motion.div>
 
       {/* KYC Compliance Row */}
       <motion.div variants={itemVariants}>
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
           <ShieldCheck className="text-primary" size={20} />
           KYC Compliance
         </h2>
@@ -85,7 +85,7 @@ export default function AdminDashboard() {
 
       {/* Risk & Safety Row */}
       <motion.div variants={itemVariants}>
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 mt-8">
+        <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2 mt-8">
           <AlertTriangle className="text-orange-500" size={20} />
           Risk & Fraud Prevention
         </h2>
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
 
       {/* Infrastructure Row */}
       <motion.div variants={itemVariants}>
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 mt-8">
+        <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2 mt-8">
           <Activity className="text-green-500" size={20} />
           Ledger Infrastructure
         </h2>
